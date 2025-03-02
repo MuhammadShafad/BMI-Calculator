@@ -1,121 +1,82 @@
-
-import './App.css'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-
-import { useState } from 'react';
-
-
+import { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import { Container, Form, Button, Card } from "react-bootstrap";
 
 function App() {
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [calculateValue, setCalculateValue] = useState(null);
+  const [category, setCategory] = useState("");
 
+  const inputHeight = (e) => {
+    setHeight(e.target.value);
+  };
 
+  const inputWeight = (e) => {
+    setWeight(e.target.value);
+  };
 
+  const calculateBMI = (e) => {
+    e.preventDefault();
+    if (weight && height) {
+      const cmHeight = height / 100;
+      const bmi = (weight / (cmHeight * cmHeight)).toFixed(1);
+      setCalculateValue(bmi);
+      setCategory(getCategory(bmi));
+    } else {
+      alert("Please fill in all input fields.");
+    }
+    setWeight("");
+    setHeight("");
+  };
 
- const[weight,setweight] =useState('')
- const[height,setHeight]=useState('')
-const[calculateValue,setcalculateValue]=useState(null)
-const[category,setCategory]=useState('')
-
-
-
- const  inputheight=(e)=>{
- console.log(e.target.value);
- setHeight(e.target.value)
- 
-  
- }
-const inputweight=(e)=>{
-  console.log(e.target.value);
-  setweight(e.target.value)
-  
-}
-const calculateBMI=(e)=>{
-
-  e.preventDefault() 
-  if(weight && height){
-
-const cmheight=(height/100)
-
-   const bmi=(weight/(cmheight*cmheight)).toFixed(1)
-    console.log(bmi);
-    setcalculateValue(bmi)
-
-
-
-  const categoryResult=getCategory(bmi)
-   setCategory(categoryResult)
-
-    
-  }
-  else{
-    alert("please completily fill the input felidss")
-  }
-
-  setweight('')
-  setHeight('')
-}
-const getCategory=(calculateValue)=>{
-
-  if(calculateValue < 18.5) return "Underweight";
-  if(calculateValue >= 18.5 && calculateValue < 24.9) return "Normal weight";
-  if(calculateValue >= 25 && calculateValue < 29.9) return "Overweight ";
-  return "Obese";
- 
-
-  
-
-}
-
-
-  
+  const getCategory = (bmi) => {
+    if (bmi < 18.5) return "Underweight";
+    if (bmi >= 18.5 && bmi < 24.9) return "Normal weight";
+    if (bmi >= 25 && bmi < 29.9) return "Overweight";
+    return "Obese";
+  };
 
   return (
-    <>
- <h1 style={{textAlign:'center'}}>BMI Calculator</h1>
-<div className='main ms-5 d-flex  justify-content-center align-items-center ' >
- 
-  <div className="calc_body " style={{width:"400px",border:'2px solid' ,borderColor: 'rgb(47, 164, 231)',  background: "linear-gradient(to top,white,  rgb(47, 164, 231) )",borderRadius:'10px'}}>
-  <Form>
-      <Form.Group className="mb-3" controlId="weightId">
-        <Form.Label style={{color:'white'}}> Enter your weight</Form.Label>
-        <Form.Control type="number" placeholder=" Enter your weight in kg " onChange={inputweight} value={weight}   />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label  style={{color:'white'}}> Enter your Height </Form.Label>
-        <Form.Control type="number" placeholder="Enter your Height in cente meter" onChange={inputheight} value={height}/>
-      </Form.Group>
-      <button style={{backgroundColor: 'white' ,color:'rgb(47, 164, 231)',border:'2px solid', borderColor:'rgb(47, 164, 231)',borderRadius:'5px',marginLeft:'150px'}}  type="submit" onClick={calculateBMI}>
-        Submit
+    <Container className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: "#f0f8ff" }}>
+      <Card className="shadow-lg p-4 text-center" style={{ width: "400px", borderRadius: "15px", background: "linear-gradient(to bottom, #ffffff, #89CFF0)" }}>
+        <Card.Body>
+          <Card.Title className="text-primary fw-bold fs-3">BMI Calculator</Card.Title>
+          <Form className="mt-3">
+            <Form.Group className="mb-3">
+              <Form.Label className="fw-semibold text-dark">Enter your weight (kg)</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter weight in kg"
+                onChange={inputWeight}
+                value={weight}
+                className="text-center"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label className="fw-semibold text-dark">Enter your height (cm)</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter height in cm"
+                onChange={inputHeight}
+                value={height}
+                className="text-center"
+              />
+            </Form.Group>
+            <Button variant="primary" className="w-100" onClick={calculateBMI}>Calculate BMI</Button>
+          </Form>
 
-      </button>  <br />
-    
-    
-
-    </Form>
-    <br />
-   
-{
-  calculateValue &&
-  
-  <div style={{marginLeft:'70px'}}>
-  <h6 style={{color:'rgb(47, 164, 231)'}}> BMI Value : {calculateValue}</h6>
-  <h6 style={{color:'rgb(47, 164, 231)'}} > Your Category : {category}</h6>
-
-</div>
-
+          {calculateValue && (
+            <div className="mt-4 p-3 bg-light rounded shadow-sm">
+              <h5 className="text-primary">BMI Value: {calculateValue}</h5>
+              <h5 className="text-primary">Category: {category}</h5>
+            </div>
+          )}
+        </Card.Body>
+      </Card>
+    </Container>
+  );
 }
 
-
-  </div>
-
-
-</div>
-
-
-
-    </>
-  )
-}
-
-export default App
+export default App;
